@@ -1,15 +1,23 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 
-export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {
+export default function PurchaseMethods({
+  navigation,
+}: RootStackScreenProps<'PurchaseMethods'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>This screen doesn't exist.</Text>
-      <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
+      <Text style={styles.title}>Purchase Methods</Text>
+      <Pressable
+        onPress={() => navigation.replace('AddMethod')}
+        style={styles.link}
+      >
+        <Text style={styles.linkText}>Add a purchase method</Text>
+      </Pressable>
+      <Pressable onPress={() => navigation.replace('Home')} style={styles.link}>
         <Text style={styles.linkText}>Go to home screen!</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }
