@@ -1,21 +1,32 @@
+import { useContext } from 'react';
 import { StyleSheet, Pressable } from 'react-native';
 
 import { Text, View } from '../components/Themed';
+import { AppData } from '../data/Provider';
 import { RootStackScreenProps } from '../types';
 
 export default function PurchaseMethods({
   navigation,
 }: RootStackScreenProps<'PurchaseMethods'>) {
+  const { purchaseMethods } = useContext(AppData);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Purchase Methods</Text>
+      {Object.values(purchaseMethods).map(({ id, description }) => (
+        <Pressable onPress={() => navigation.navigate('AddMethod', { id })}>
+          <Text>{description}</Text>
+        </Pressable>
+      ))}
       <Pressable
-        onPress={() => navigation.replace('AddMethod')}
+        onPress={() => navigation.navigate('AddMethod')}
         style={styles.link}
       >
         <Text style={styles.linkText}>Add a purchase method</Text>
       </Pressable>
-      <Pressable onPress={() => navigation.replace('Home')} style={styles.link}>
+      <Pressable
+        onPress={() => navigation.navigate('Home')}
+        style={styles.link}
+      >
         <Text style={styles.linkText}>Go to home screen!</Text>
       </Pressable>
     </View>

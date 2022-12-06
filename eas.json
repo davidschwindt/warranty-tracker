@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 2.1.0",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "development": {
+      "channel": "production",
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "staging": {
+      "distribution": "internal",
+      "channel": "staging",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

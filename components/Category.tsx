@@ -1,25 +1,51 @@
-import { items as allItems } from '../data';
-import { View, Text } from './Themed';
+import { useContext, useState } from 'react';
+import { Text, View } from './Themed';
 import { Pressable } from 'react-native';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList, RootStackScreenProps } from '../types';
+import { useNavigation } from '@react-navigation/native';
+import { AppData } from '../data/Provider';
 
 const Category: React.FC<{ id: string; label: string }> = ({ id, label }) => {
   const nav = useNavigation();
+  const [expanded, setExpanded] = useState(false);
+  const [deleteIsActive, setDeleteIsActive] = useState(false);
+  const { items: allItems, deleteCategory } = useContext(AppData);
+  const handleDelete = () => deleteCategory(id);
 
-  const items = Object.entries(allItems).filter(
-    ([itemId, { category }]) => category === id
+  const items = Object.values(allItems).filter(
+    ({ category }) => category === id
   );
 
   return (
-    <View>
-      <Text>{label}</Text>
-      {items.map(([itemId, { label: itemLabel }]) => (
-        <Pressable onPress={() => nav.navigate('ViewItem', { id: itemId })}>
-          <Text>{itemLabel}</Text>
+    <>
+      <View style={{ flexDirection: 'row' }}>
+        <Pressable
+          onPress={() => setExpanded(!expanded)}
+          onLongPress={() => setDeleteIsActive(!deleteIsActive)}
+        >
+          <Text>{label}</Text>
         </Pressable>
-      ))}
-    </View>
+        <Text>({items.length})</Text>
+        {deleteIsActive && (
+          <Pressable onPress={handleDelete}>
+            <Text>Delete</Text>
+          </Pressable>
+        )}
+      </View>
+      {expanded && (
+        <>
+          <Pressable
+            onPress={() => nav.navigate('AddItem', { categoryId: id })}
+          >
+            <Text>Add Item</Text>
+          </Pressable>
+          {items.map(({ id: itemId, description: itemLabel }) => (
+            <Pressable onPress={() => nav.navigate('ViewItem', { id: itemId })}>
+              <Text>{itemLabel}</Text>
+            </Pressable>
+          ))}
+        </>
+      )}
+    </>
   );
 };
 

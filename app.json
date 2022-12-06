@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "warranty-app",
-    "slug": "warranty-app",
+    "name": "Warranty Tracker",
+    "owner": "warranty",
+    "slug": "warranty-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -13,7 +14,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/ef4f5a1f-5f84-4be1-9379-334d914d3f71"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -25,10 +27,31 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.warrantytracker.app",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ef4f5a1f-5f84-4be1-9379-334d914d3f71"
+      }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Add photos of your items to make filing claims easier.",
+          "cameraPermission": "Take photos of your items to make filing claims easier."
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
