@@ -53,22 +53,37 @@ const ImageInput: React.FC<Props> = ({
   }, [imageUri]);
 
   return (
-    <View style={{ flexDirection: 'row' }}>
-      <Pressable onPress={openCamera}>
-        <Text>Open Camera</Text>
-      </Pressable>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ width: 75, height: 75, backgroundColor: 'grey' }}>
+        {imageUri && !recentlyDeleted && (
+          <Image
+            source={{ uri: imageUri }}
+            style={{ width: '100%', height: '100%' }}
+          />
+        )}
+      </View>
 
-      <Pressable onPress={openImagePicker}>
-        <Text>Open Gallery</Text>
-      </Pressable>
+      <View
+        style={{
+          marginLeft: 24,
+          width: 200,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Pressable onPress={openImagePicker}>
+          <Text>Browse...</Text>
+        </Pressable>
 
-      {imageUri && !recentlyDeleted && (
-        <Image source={{ uri: imageUri }} style={{ width: 50, height: 50 }} />
-      )}
+        <Pressable onPress={openCamera}>
+          <Text>Camera</Text>
+        </Pressable>
 
-      <Pressable onPress={handleDelete}>
-        <Text>Delete</Text>
-      </Pressable>
+        <Pressable onPress={handleDelete}>
+          <Text>Delete</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { Text, View } from './Themed';
-import { Pressable } from 'react-native';
+import { Text, useThemeColor, View } from './Themed';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AppData } from '../data/Provider';
 
@@ -15,38 +15,81 @@ const Category: React.FC<{ id: string; label: string }> = ({ id, label }) => {
     ({ category }) => category === id
   );
 
+  const color = useThemeColor({}, 'text');
+
+  if (id === '' && !items.length) {
+    return null;
+  }
+
   return (
     <>
-      <View style={{ flexDirection: 'row' }}>
-        <Pressable
-          onPress={() => setExpanded(!expanded)}
-          onLongPress={() => setDeleteIsActive(!deleteIsActive)}
-        >
-          <Text>{label}</Text>
-        </Pressable>
-        <Text>({items.length})</Text>
-        {deleteIsActive && (
-          <Pressable onPress={handleDelete}>
-            <Text>Delete</Text>
-          </Pressable>
-        )}
-      </View>
+      <Pressable
+        onPress={() => setExpanded(!expanded)}
+        onLongPress={() => setDeleteIsActive(!deleteIsActive)}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Text style={styles.categoryLabel}>
+          {label} ({items.length})
+        </Text>
+        <View style={{ marginLeft: 24 }}>
+          {deleteIsActive ? (
+            <Pressable onPress={handleDelete}>
+              <Text>Delete</Text>
+            </Pressable>
+          ) : (
+            <Text
+              style={{
+                fontSize: 24,
+                transform: [{ rotate: expanded ? '90deg' : '0deg' }],
+              }}
+            >
+              {'>'}
+            </Text>
+          )}
+        </View>
+      </Pressable>
       {expanded && (
-        <>
-          <Pressable
-            onPress={() => nav.navigate('AddItem', { categoryId: id })}
-          >
-            <Text>Add Item</Text>
-          </Pressable>
+        <View style={{ alignItems: 'flex-start' }}>
           {items.map(({ id: itemId, description: itemLabel }) => (
             <Pressable onPress={() => nav.navigate('ViewItem', { id: itemId })}>
-              <Text>{itemLabel}</Text>
+              <Text style={styles.itemLabel}>{itemLabel}</Text>
             </Pressable>
           ))}
-        </>
+          <Pressable
+            onPress={() => nav.navigate('AddItem', { categoryId: id })}
+            style={[styles.addButton, { borderColor: color }]}
+          >
+            <Text style={{ fontSize: 24, lineHeight: 30 }}>+</Text>
+          </Pressable>
+        </View>
       )}
     </>
   );
 };
 
 export default Category;
+
+const styles = StyleSheet.create({
+  categoryLabel: {
+    fontSize: 24,
+  },
+  addButton: {
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    width: 30,
+    height: 30,
+    marginVertical: 8,
+    marginHorizontal: 12,
+  },
+  itemLabel: {
+    marginVertical: 8,
+    marginHorizontal: 12,
+    fontSize: 20,
+    fontWeight: '300',
+  },
+});

@@ -96,7 +96,7 @@ export default function ViewItem({
     purchaseMethodExtendedStatus,
   } = getManufacturerWarrantyStatus(item, purchaseMethods[item.purchaseMethod]);
 
-  const category = categories[item.category].label;
+  const category = categories[item.category]?.label || 'uncategorized';
   const purchaseDate = new Date(item.purchaseDate).toLocaleDateString();
   const purchaseMethod = purchaseMethods[item.purchaseMethod]?.description;
   return (

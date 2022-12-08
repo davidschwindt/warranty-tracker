@@ -29,13 +29,15 @@ const DurationInput: React.FC<Props> = ({
   };
 
   return (
-    <View style={{ flexDirection: 'row', zIndex: 1 }}>
+    <View style={{ flexDirection: 'row', zIndex: 1, alignItems: 'center' }}>
       <TextInput
+        style={{ width: 75, marginRight: 12 }}
         keyboardType="numeric"
         value={numUnits ? numUnits.toString() : ''}
         onChangeText={handleTextChange}
       />
       <Dropdown
+        style={{ width: 150 }}
         open={open}
         setOpen={setOpen}
         value={unit}
