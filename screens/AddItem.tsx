@@ -246,6 +246,7 @@ export default function AddItem({
       <View style={{ marginVertical: 8, zIndex: 1 }}>
         <Text style={styles.label}>{itemLabels.category}</Text>
         <Dropdown
+          placeholder="Select a category"
           open={categoryOpen}
           setOpen={setCategoryOpen}
           value={category}
@@ -313,6 +314,7 @@ export default function AddItem({
       <View style={{ marginVertical: 8, zIndex: purchaseMethodOpen ? 2 : 0 }}>
         <Text style={styles.label}>{itemLabels.purchaseMethod}</Text>
         <Dropdown
+          placeholder="Select a purchase method"
           open={purchaseMethodOpen}
           setOpen={setPurchaseMethodOpen}
           value={purchaseMethod}
