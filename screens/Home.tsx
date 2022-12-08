@@ -9,7 +9,7 @@ import AddCategory from '../components/AddCategory';
 export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
   const { categories, items } = useContext(AppData);
 
-  console.log('items', items);
+  const noItems = Object.values(items).length === 0;
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
@@ -22,6 +22,14 @@ export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
           <Text>{'Purchase\nMethods'}</Text>
         </Pressable>
       </View>
+      {noItems && (
+        <Pressable
+          onPress={() => navigation.navigate('AddItem')}
+          style={{ backgroundColor: 'green', padding: 12, width: 150 }}
+        >
+          <Text style={{ textAlign: 'center' }}>Add an item!</Text>
+        </Pressable>
+      )}
       {Object.values(categories).map(({ id, label }) => (
         <View style={{ marginVertical: 12 }}>
           <Category id={id} label={label} />
