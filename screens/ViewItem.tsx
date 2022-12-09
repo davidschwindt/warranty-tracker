@@ -208,38 +208,77 @@ export default function ViewItem({
 
       <View
         style={{
-          alignItems: 'center',
-          justifyContent: 'center',
+          // alignItems: 'center',
+          // justifyContent: 'center',
           marginVertical: 8,
         }}
       >
         {item.receiptImageUri && (
-          <>
+          <View style={{ marginVertical: 8 }}>
             <Text style={styles.text}>Photo of Receipt</Text>
-            <Image
-              source={{ uri: item.receiptImageUri }}
-              style={{ width: 150, height: 150 }}
-            />
-          </>
+            <View
+              style={{
+                height: 200,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginVertical: 8,
+              }}
+            >
+              <Image
+                source={{ uri: item.receiptImageUri }}
+                resizeMode="cover"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </View>
+          </View>
         )}
         {item.serialImageUri && (
-          <>
+          <View style={{ marginVertical: 8 }}>
             <Text style={styles.text}>Photo of Serial Number</Text>
-            <Image
-              source={{ uri: item.serialImageUri }}
-              style={{ width: 150, height: 150 }}
-            />
-          </>
+            <View
+              style={{
+                height: 200,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginVertical: 8,
+              }}
+            >
+              <Image
+                source={{ uri: item.serialImageUri }}
+                resizeMode="cover"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </View>
+          </View>
         )}
 
         {item.warrantyImageUri && (
-          <>
+          <View style={{ marginVertical: 8 }}>
             <Text style={styles.text}>Photo of Warranty</Text>
-            <Image
-              source={{ uri: item.warrantyImageUri }}
-              style={{ width: 150, height: 150 }}
-            />
-          </>
+            <View
+              style={{
+                height: 200,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginVertical: 8,
+              }}
+            >
+              <Image
+                source={{ uri: item.warrantyImageUri }}
+                resizeMode="cover"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </View>
+          </View>
         )}
       </View>
 
@@ -286,6 +325,6 @@ const styles = StyleSheet.create({
   },
   thinText: {
     fontSize: 18,
-    fontWeight: '100',
+    fontWeight: '200',
   },
 });
