@@ -290,7 +290,7 @@ export default function AddItem({
             onPress={showDatePicker}
             style={{ backgroundColor: 'blue', padding: 12 }}
           >
-            <Text>select date</Text>
+            <Text style={styles.buttonText}>select date</Text>
           </Pressable>
           {Platform.OS === 'ios' && datePickerOpen && (
             <DatePicker
