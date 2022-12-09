@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Pressable,
   Switch,
-  ScrollView,
   TextInput as DefaultTextInput,
   Platform,
 } from 'react-native';
@@ -14,12 +13,19 @@ import DatePicker, {
   DateTimePickerAndroid,
 } from '@react-native-community/datetimepicker';
 import DurationInput from '../components/DurationInput';
-import { Text, TextInput, useThemeColor, View } from '../components/Themed';
+import {
+  Text,
+  TextInput,
+  useThemeColor,
+  View,
+  ScrollView,
+} from '../components/Themed';
 import { AppData } from '../data/Provider';
 import { RootStackScreenProps } from '../types';
 import { DurationUnit } from '../types/Duration';
 import Item, { ExtendedWarrantyStart, itemLabels } from '../types/Item';
 import ImageInput from '../components/ImageInput';
+import CategoryInput from '../components/CategoryInput';
 
 enum Camera {
   item = 'item',
@@ -245,17 +251,7 @@ export default function AddItem({
 
       <View style={{ marginVertical: 8, zIndex: 1 }}>
         <Text style={styles.label}>{itemLabels.category}</Text>
-        <Dropdown
-          placeholder="Select a category"
-          open={categoryOpen}
-          setOpen={setCategoryOpen}
-          value={category}
-          setValue={setCategory}
-          items={Object.values(categories).map(({ id: value, label }) => ({
-            value,
-            label,
-          }))}
-        />
+        <CategoryInput value={category} onChange={setCategory} />
       </View>
 
       <View style={{ marginVertical: 8 }}>

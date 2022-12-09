@@ -6,6 +6,7 @@ import { forwardRef } from 'react';
 import {
   Text as DefaultText,
   View as DefaultView,
+  ScrollView as DefaultScrollView,
   TextInput as DefaultTextInput,
 } from 'react-native';
 
@@ -33,6 +34,7 @@ type ThemeProps = {
 
 export type TextProps = ThemeProps & DefaultText['props'];
 export type ViewProps = ThemeProps & DefaultView['props'];
+export type ScrollViewProps = ThemeProps & DefaultScrollView['props'];
 export type TextInputProps = ThemeProps & DefaultTextInput['props'];
 
 export function Text(props: TextProps) {
@@ -50,6 +52,18 @@ export function View(props: ViewProps) {
   );
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function ScrollView(props: ScrollViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    'background'
+  );
+
+  return (
+    <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
+  );
 }
 
 export const TextInput = forwardRef((props: TextInputProps, ref) => {

@@ -1,11 +1,10 @@
-import { StyleSheet, Pressable, Image, ScrollView } from 'react-native';
+import { StyleSheet, Pressable, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { Text, useThemeColor, View } from '../components/Themed';
-import { RootStackParamList, RootStackScreenProps } from '../types';
+import { Text, View, ScrollView } from '../components/Themed';
+import { RootStackScreenProps } from '../types';
 import { useContext } from 'react';
 import { AppData } from '../data/Provider';
 import Item, { ExtendedWarrantyStart } from '../types/Item';
-import useColorScheme from '../hooks/useColorScheme';
 import { Duration, DurationUnit } from '../types/Duration';
 import PurchaseMethod from '../types/PurchaseMethod';
 

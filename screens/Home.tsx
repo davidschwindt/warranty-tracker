@@ -1,13 +1,16 @@
-import { StyleSheet, Pressable, ScrollView } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { StyleSheet, Pressable } from 'react-native';
+import { Text, View, ScrollView, useThemeColor } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import Category from '../components/Category';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AppData } from '../data/Provider';
-import AddCategory from '../components/AddCategory';
+import { SvgXml } from 'react-native-svg';
+import CreditCardIcon from '../assets/icons/creditCard.svg';
 
 export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
   const { categories, items } = useContext(AppData);
+  const [addActive, setAddActive] = useState(false);
+  const color = useThemeColor({}, 'text');
 
   const noItems = Object.values(items).length === 0;
 
@@ -19,7 +22,7 @@ export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
           onPress={() => navigation.navigate('PurchaseMethods')}
           style={{ marginVertical: 25 }}
         >
-          <Text>{'Purchase\nMethods'}</Text>
+          <SvgXml xml={CreditCardIcon} width={60} height={60} stroke={color} />
         </Pressable>
       </View>
       {noItems && (
@@ -30,25 +33,67 @@ export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
           <Text style={{ textAlign: 'center' }}>Add an item!</Text>
         </Pressable>
       )}
-      {Object.values(categories).map(({ id, label }) => (
-        <View style={{ marginVertical: 12 }}>
-          <Category id={id} label={label} />
-        </View>
-      ))}
+      {Object.values(categories)
+        .sort((a, b) => (b.label > a.label ? -1 : 1))
+        .map(({ id, label }) => (
+          <View style={{ marginVertical: 12 }}>
+            <Category id={id} label={label} />
+          </View>
+        ))}
       <View style={{ marginVertical: 12 }}>
         <Category id="" label="Uncategorized" />
       </View>
-      <View style={{ marginVertical: 24 }}>
-        <AddCategory />
-      </View>
-      <Pressable
-        onPress={() => navigation.navigate('AddItem')}
-        style={styles.addItemButton}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 36,
+          right: 36,
+          alignItems: 'flex-end',
+        }}
       >
-        <Text style={{ fontSize: 40, lineHeight: 60, textAlign: 'center' }}>
-          +
-        </Text>
-      </Pressable>
+        {addActive && (
+          <>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('AddItem');
+                setAddActive(false);
+              }}
+              style={{}}
+            >
+              <Text style={{ fontSize: 20 }}>Item</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('AddMethod');
+                setAddActive(false);
+              }}
+              style={{
+                marginVertical: 12,
+                borderTopColor: color,
+                borderTopWidth: 1,
+                paddingVertical: 12,
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>Purchase Method</Text>
+            </Pressable>
+          </>
+        )}
+        <Pressable
+          onPress={() => setAddActive(!addActive)}
+          style={styles.addItemButton}
+        >
+          <Text
+            style={{
+              fontSize: 40,
+              lineHeight: 60,
+              textAlign: 'center',
+              color: 'white',
+            }}
+          >
+            +
+          </Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }
@@ -77,10 +122,6 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
   addItemButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    margin: 36,
     backgroundColor: 'green',
     height: 60,
     width: 60,

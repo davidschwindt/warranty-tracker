@@ -3,7 +3,7 @@ import Item, { Category } from '../types/Item';
 import PurchaseMethod from '../types/PurchaseMethod';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const createId = () => Math.floor(Math.random() * 1000000000).toString();
+export const createId = () => Date.now().toString();
 
 type AppDataProps = {
   items: Record<string, Item>;
@@ -11,7 +11,8 @@ type AppDataProps = {
   editItem: (data: Item) => void;
   deleteItem: (id: string) => void;
   categories: Record<string, Category>;
-  addCategory: (data: Omit<Category, 'id'>) => void;
+  addCategory: (data: Category) => void;
+  editCategory: (data: Category) => void;
   deleteCategory: (id: string) => void;
   purchaseMethods: Record<string, PurchaseMethod>;
   addPurchaseMethod: (data: Omit<PurchaseMethod, 'id'>) => void;
@@ -25,7 +26,8 @@ export const AppData = createContext<AppDataProps>({
   editItem: (data: Item) => null,
   deleteItem: (id: string) => null,
   categories: {},
-  addCategory: (data: Omit<Category, 'id'>) => null,
+  addCategory: (data: Category) => null,
+  editCategory: (data: Category) => null,
   deleteCategory: (id: string) => null,
   purchaseMethods: {},
   addPurchaseMethod: (data: Omit<PurchaseMethod, 'id'>) => null,
@@ -62,9 +64,14 @@ const AppDataProvider: React.FC<{
     AsyncStorage.setItem('@items', JSON.stringify(newItems));
   };
 
-  const addCategory = (data: Omit<Category, 'id'>) => {
-    const id = createId();
-    const newCategories = { ...categories, [id]: { id, ...data } };
+  const addCategory = (data: Category) => {
+    const newCategories = { ...categories, [data.id]: data };
+    setCategories(newCategories);
+    AsyncStorage.setItem('@categories', JSON.stringify(newCategories));
+  };
+
+  const editCategory = (data: Category) => {
+    const newCategories = { ...categories, [data.id]: data };
     setCategories(newCategories);
     AsyncStorage.setItem('@categories', JSON.stringify(newCategories));
   };
@@ -142,6 +149,7 @@ const AppDataProvider: React.FC<{
       deleteItem,
       categories,
       addCategory,
+      editCategory,
       deleteCategory,
       purchaseMethods,
       addPurchaseMethod,

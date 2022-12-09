@@ -6,6 +6,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
+import { View } from '../components/Themed';
 import AddItem from '../screens/AddItem';
 import AddMethod from '../screens/AddMethod';
 import Home from '../screens/Home';
