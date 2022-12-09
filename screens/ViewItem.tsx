@@ -1,12 +1,13 @@
 import { StyleSheet, Pressable, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { Text, View, ScrollView } from '../components/Themed';
+import { Text, View, ScrollView, useThemeColor } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { useContext } from 'react';
 import { AppData } from '../data/Provider';
 import Item, { ExtendedWarrantyStart } from '../types/Item';
 import { Duration, DurationUnit } from '../types/Duration';
 import PurchaseMethod from '../types/PurchaseMethod';
+import WarrantyStatus from '../components/WarrantyStatus';
 
 type WarrantyStatus = {
   isExpired: string;
@@ -78,9 +79,12 @@ const getManufacturerWarrantyStatus = (
   };
 };
 
+const defaultText = 'N/A';
+
 export default function ViewItem({
   navigation,
 }: RootStackScreenProps<'ViewItem'>) {
+  const color = useThemeColor({}, 'text');
   const { items, categories, purchaseMethods } = useContext(AppData);
   const { params } = useRoute();
   const id = params?.id;
@@ -95,27 +99,36 @@ export default function ViewItem({
     purchaseMethodExtendedStatus,
   } = getManufacturerWarrantyStatus(item, purchaseMethods[item.purchaseMethod]);
 
-  const category = categories[item.category]?.label || 'uncategorized';
+  const category = categories[item.category]?.text;
   const purchaseDate = new Date(item.purchaseDate).toLocaleDateString();
-  const purchaseMethod = purchaseMethods[item.purchaseMethod]?.description;
+  const purchaseMethod = purchaseMethods[item.purchaseMethod];
+  const purchaseMethodText = purchaseMethod
+    ? `${purchaseMethod.description} (${purchaseMethod.lastFour})`
+    : defaultText;
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ paddingVertical: 48, paddingHorizontal: 24 }}
+      contentContainerStyle={{
+        paddingTop: 64,
+        paddingHorizontal: 24,
+        paddingBottom: 48,
+      }}
     >
-      <Text style={styles.title}>{item.description}</Text>
-      <View style={{ flexDirection: 'row' }}>
-        <View>
-          <Text>Make</Text>
-          <Text>{item.make}</Text>
+      <Text style={styles.title}>{item.description || 'Untitled'}</Text>
+      <View style={{ flexDirection: 'row', marginVertical: 8 }}>
+        <View style={{ width: '50%' }}>
+          <Text style={styles.text}>Make</Text>
+          <Text style={styles.thinText}>{item.make || defaultText}</Text>
         </View>
         <View>
-          <Text>Model</Text>
-          <Text>{item.model}</Text>
+          <Text style={styles.text}>Model</Text>
+          <Text style={styles.thinText}>{item.model || defaultText}</Text>
         </View>
       </View>
-      <Text>Serial Number</Text>
-      <Text>{item.serial}</Text>
+      <View style={{ marginVertical: 8 }}>
+        <Text style={styles.text}>Serial Number</Text>
+        <Text style={styles.thinText}>{item.serial || defaultText}</Text>
+      </View>
 
       {item.itemImageUri && (
         <View
@@ -123,6 +136,7 @@ export default function ViewItem({
             height: 200,
             alignItems: 'center',
             justifyContent: 'center',
+            marginVertical: 8,
           }}
         >
           <Image
@@ -136,68 +150,72 @@ export default function ViewItem({
         </View>
       )}
 
-      <View style={{ flexDirection: 'row' }}>
-        <Text>Manufacturer Warranty</Text>
-        <Text>{manufacturerStatus.isExpired}</Text>
-      </View>
-      <View style={{ flexDirection: 'row', paddingLeft: 24 }}>
-        <Text>Coverage Dates</Text>
-        <Text>
-          {manufacturerStatus.startDate} - {manufacturerStatus.endDate}
-        </Text>
-      </View>
-
-      {inStoreExtendedStatus && (
-        <>
-          <View style={{ flexDirection: 'row' }}>
-            <Text>In-Store Extended Warranty</Text>
-            <Text>{inStoreExtendedStatus.isExpired}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', paddingLeft: 24 }}>
-            <Text>Coverage Dates</Text>
-            <Text>
-              {inStoreExtendedStatus.startDate} -{' '}
-              {inStoreExtendedStatus.endDate}
-            </Text>
-          </View>
-        </>
-      )}
-
-      {purchaseMethodExtendedStatus && (
-        <>
-          <View style={{ flexDirection: 'row' }}>
-            <Text>Purchase Method Extended Warranty</Text>
-            <Text>{purchaseMethodExtendedStatus.isExpired}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', paddingLeft: 24 }}>
-            <Text>Coverage Dates</Text>
-            <Text>
-              {purchaseMethodExtendedStatus.startDate} -
-              {purchaseMethodExtendedStatus.endDate}
-            </Text>
-          </View>
-        </>
-      )}
-
-      <View style={{ flexDirection: 'row' }}>
-        <Text>Category</Text>
-        <Text>{category}</Text>
+      <View style={{ marginVertical: 8 }}>
+        <WarrantyStatus
+          label={'Manufacturer Warranty'}
+          status={manufacturerStatus}
+        />
+        {inStoreExtendedStatus && (
+          <WarrantyStatus
+            label={'In-Store Extended Warranty'}
+            status={inStoreExtendedStatus}
+          />
+        )}
+        {purchaseMethodExtendedStatus && (
+          <WarrantyStatus
+            label={'Purchase Method Extended Warranty'}
+            status={purchaseMethodExtendedStatus}
+          />
+        )}
       </View>
 
-      <View style={{ flexDirection: 'row' }}>
-        <Text>Purchase Date</Text>
-        <Text>{purchaseDate}</Text>
+      <View
+        style={{ borderBottomWidth: 1, borderColor: color, marginVertical: 8 }}
+      />
+
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: 8,
+        }}
+      >
+        <Text style={styles.text}>Category: </Text>
+        <Text style={styles.boldText}>{category || defaultText}</Text>
       </View>
 
-      <View style={{ flexDirection: 'row' }}>
-        <Text>Purchase Method</Text>
-        <Text>{purchaseMethod}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: 8,
+        }}
+      >
+        <Text style={styles.text}>Purchase Date: </Text>
+        <Text style={styles.boldText}>{purchaseDate || defaultText}</Text>
       </View>
 
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: 8,
+        }}
+      >
+        <Text style={styles.text}>Purchase Method: </Text>
+        <Text style={styles.boldText}>{purchaseMethodText || defaultText}</Text>
+      </View>
+
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: 8,
+        }}
+      >
         {item.receiptImageUri && (
           <>
-            <Text>Photo of Receipt</Text>
+            <Text style={styles.text}>Photo of Receipt</Text>
             <Image
               source={{ uri: item.receiptImageUri }}
               style={{ width: 150, height: 150 }}
@@ -206,7 +224,7 @@ export default function ViewItem({
         )}
         {item.serialImageUri && (
           <>
-            <Text>Photo of Serial Number</Text>
+            <Text style={styles.text}>Photo of Serial Number</Text>
             <Image
               source={{ uri: item.serialImageUri }}
               style={{ width: 150, height: 150 }}
@@ -216,7 +234,7 @@ export default function ViewItem({
 
         {item.warrantyImageUri && (
           <>
-            <Text>Photo of Warranty</Text>
+            <Text style={styles.text}>Photo of Warranty</Text>
             <Image
               source={{ uri: item.warrantyImageUri }}
               style={{ width: 150, height: 150 }}
@@ -225,7 +243,7 @@ export default function ViewItem({
         )}
       </View>
 
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Pressable
           onPress={() => navigation.navigate('AddItem', { id })}
           style={{ backgroundColor: 'red', flex: 1, padding: 12, margin: 12 }}
@@ -248,7 +266,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: 'bold',
   },
   link: {
@@ -258,5 +276,16 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  text: {
+    fontSize: 18,
+  },
+  boldText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  thinText: {
+    fontSize: 18,
+    fontWeight: '100',
   },
 });

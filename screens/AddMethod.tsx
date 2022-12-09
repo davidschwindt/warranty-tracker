@@ -123,7 +123,9 @@ export default function AddMethod({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Purchase Method</Text>
+      <Text style={styles.title}>
+        {isEdit ? 'Edit' : 'Add'} Purchase Method
+      </Text>
 
       <Text>Description</Text>
       <TextInput value={description} onChangeText={setDescription} />
