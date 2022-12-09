@@ -28,14 +28,21 @@ const LimitInput: React.FC<Props> = ({ limit: { amount, type }, setLimit }) => {
   }, [innerType]);
 
   return (
-    <View style={{ flexDirection: 'row', zIndex: 1, alignItems: 'center' }}>
-      <Text>$</Text>
+    <View
+      style={{
+        flexDirection: 'row',
+        zIndex: 1,
+        alignItems: 'center',
+      }}
+    >
+      <Text>$ </Text>
       <TextInput
         keyboardType="numeric"
         value={amount ? amount.toString() : ''}
         onChangeText={handleAmountChange}
+        style={{ minWidth: 100 }}
       />
-      <Text>per</Text>
+      <Text> per </Text>
       <Dropdown
         open={open}
         setOpen={setOpen}
@@ -59,6 +66,7 @@ const LimitInput: React.FC<Props> = ({ limit: { amount, type }, setLimit }) => {
             label: 'Person',
           },
         ]}
+        containerStyle={{ width: 125 }}
       />
     </View>
   );

@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { StyleSheet, Pressable, Switch } from 'react-native';
 import Dropdown from 'react-native-dropdown-picker';
 import DurationInput from '../components/DurationInput';
-import { Text, TextInput, View } from '../components/Themed';
+import { ScrollView, Text, TextInput, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import {
   ProtectionLimit,
@@ -66,6 +66,7 @@ export default function AddMethod({
       ? method.extendedWarranty.duration.unit
       : DurationUnit.day
   );
+  const [extendedUnitOpen, setExtendedUnitOpen] = useState(false);
   const [extendedStart, setExtendedStart] = useState(
     method?.extendedWarranty
       ? method.extendedWarranty.startDate
@@ -84,6 +85,12 @@ export default function AddMethod({
 
   const addLimit = () =>
     setLimits([...limits, { amount: 0, type: ProtectionLimitType.account }]);
+
+  const removeLimit = (index: number) => {
+    const newLimits = [...limits];
+    newLimits.splice(index, 1);
+    setLimits(newLimits);
+  };
 
   const draftPurchaseMethod = {
     description,
@@ -113,7 +120,7 @@ export default function AddMethod({
     } else {
       addPurchaseMethod(draftPurchaseMethod);
     }
-    navigation.goBack();
+    navigation.navigate('PurchaseMethods');
   };
 
   const handleDelete = () => {
@@ -122,77 +129,131 @@ export default function AddMethod({
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
       <Text style={styles.title}>
         {isEdit ? 'Edit' : 'Add'} Purchase Method
       </Text>
 
-      <Text>Description</Text>
-      <TextInput value={description} onChangeText={setDescription} />
+      <View style={{ marginVertical: 8 }}>
+        <Text>Description</Text>
+        <TextInput value={description} onChangeText={setDescription} />
+      </View>
 
-      <Text>Last 4 Digits</Text>
-      <TextInput
-        value={lastFour}
-        onChangeText={setLastFour}
-        keyboardType="numeric"
-      />
-
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text>Purchase Protection/Security</Text>
-        <Switch
-          value={protectionEnabled}
-          onValueChange={setProtectionEnabled}
+      <View style={{ marginVertical: 8 }}>
+        <Text>Last 4 Digits</Text>
+        <TextInput
+          value={lastFour}
+          onChangeText={setLastFour}
+          keyboardType="numeric"
         />
       </View>
-      {protectionEnabled && (
-        <>
-          <Text>Duration</Text>
-          <View style={{ zIndex: 10 }}>
-            <DurationInput
-              numUnits={protectionNumUnits}
-              setNumUnits={setProtectionNumUnits}
-              unit={protectionUnit}
-              setUnit={setProtectionUnit}
-            />
-          </View>
 
-          <Text>Protects Against</Text>
-          <CheckboxList
-            values={protectionThreats}
-            onValuesChange={setProtectionThreats}
-            options={[
-              { label: 'Damage', value: Threat.damage },
-              { label: 'Loss', value: Threat.loss },
-              { label: 'Theft', value: Threat.theft },
-            ]}
+      <View style={{ marginTop: 8 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text>Purchase Protection/Security</Text>
+          <Switch
+            value={protectionEnabled}
+            onValueChange={setProtectionEnabled}
           />
-          {limits.map((limit, i, array) => (
-            <View style={{ zIndex: array.length - i }}>
-              <LimitInput
-                limit={limit}
-                setLimit={(value) => updateLimit(i, value)}
+        </View>
+      </View>
+      {protectionEnabled && (
+        <View style={{ marginLeft: 16 }}>
+          <View style={{ marginVertical: 8 }}>
+            <Text>Duration</Text>
+            <View style={{ zIndex: 10 }}>
+              <DurationInput
+                numUnits={protectionNumUnits}
+                setNumUnits={setProtectionNumUnits}
+                unit={protectionUnit}
+                setUnit={setProtectionUnit}
               />
             </View>
-          ))}
-          <Pressable onPress={addLimit}>
-            <Text>Add Limit</Text>
-          </Pressable>
-        </>
+          </View>
+
+          <View style={{ marginVertical: 8 }}>
+            <Text>Protects Against</Text>
+            <CheckboxList
+              values={protectionThreats}
+              onValuesChange={setProtectionThreats}
+              options={[
+                { label: 'Damage', value: Threat.damage },
+                { label: 'Loss', value: Threat.loss },
+                { label: 'Theft', value: Threat.theft },
+              ]}
+            />
+          </View>
+          {limits.map((limit, i, array) => {
+            const isLast = i === array.length - 1;
+            return (
+              <View
+                style={{
+                  zIndex: array.length - i,
+                  marginVertical: 8,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <LimitInput
+                  limit={limit}
+                  setLimit={(value) => updateLimit(i, value)}
+                />
+                <Pressable
+                  onPress={isLast ? addLimit : () => removeLimit(i)}
+                  style={{
+                    backgroundColor: isLast ? 'green' : 'red',
+                    width: 24,
+                    height: 24,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 16,
+                    marginLeft: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      lineHeight: 26,
+                      fontSize: 24,
+                    }}
+                  >
+                    {isLast ? '+' : '-'}
+                  </Text>
+                </Pressable>
+              </View>
+            );
+          })}
+        </View>
       )}
 
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 8,
+          zIndex: -1,
+        }}
+      >
         <Text>Extended Warranty/Protection</Text>
         <Switch value={extendedEnabled} onValueChange={setExtendedEnabled} />
       </View>
       {extendedEnabled && (
-        <View style={{ paddingLeft: 12 }}>
-          <View style={{ zIndex: 2 }}>
+        <View
+          style={{
+            paddingLeft: 16,
+            marginBottom: 8,
+            zIndex: extendedUnitOpen ? 1000 : -1,
+          }}
+        >
+          <View style={{ zIndex: 2, marginBottom: 8 }}>
             <Text>Duration</Text>
             <DurationInput
               numUnits={extendedNumUnits}
               setNumUnits={setExtendedNumUnits}
               unit={extendedUnit}
               setUnit={setExtendedUnit}
+              onChangeOpen={setExtendedUnitOpen}
             />
           </View>
           <Text>Coverage Begins</Text>
@@ -222,7 +283,13 @@ export default function AddMethod({
         <Switch value={returnEnabled} onValueChange={setReturnEnabled} />
       </View>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          zIndex: -1,
+        }}
+      >
         <Pressable
           onPress={() => navigation.goBack()}
           style={{ backgroundColor: 'grey', padding: 12, margin: 12, flex: 1 }}
@@ -244,15 +311,16 @@ export default function AddMethod({
           <Text style={{ textAlign: 'center' }}>Delete</Text>
         </Pressable>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    paddingTop: 64,
     paddingHorizontal: 24,
-    paddingVertical: 48,
+    paddingBottom: 48,
   },
   title: {
     fontSize: 20,

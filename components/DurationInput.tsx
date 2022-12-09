@@ -1,13 +1,14 @@
 import Dropdown from 'react-native-dropdown-picker';
 import { TextInput, View } from './Themed';
 import { durationLabels, DurationUnit } from '../types/Duration';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type Props = {
   numUnits?: number;
   setNumUnits: Dispatch<SetStateAction<number>>;
   unit: DurationUnit;
   setUnit: Dispatch<SetStateAction<DurationUnit>>;
+  onChangeOpen?: (open: boolean) => void;
 };
 
 const DurationInput: React.FC<Props> = ({
@@ -15,8 +16,13 @@ const DurationInput: React.FC<Props> = ({
   setNumUnits,
   unit,
   setUnit,
+  onChangeOpen,
 }) => {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    onChangeOpen?.(open);
+  }, [open]);
 
   const handleTextChange = (value: string) => {
     if (!value) {

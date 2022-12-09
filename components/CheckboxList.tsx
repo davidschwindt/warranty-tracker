@@ -23,12 +23,14 @@ const CheckboxList: React.FC<Props> = ({
   return (
     <>
       {options.map(({ label, value: optionValue }) => (
-        <View style={{ flexDirection: 'row' }}>
+        <View
+          style={{ flexDirection: 'row', marginVertical: 4, marginLeft: 8 }}
+        >
           <Checkbox
             value={values.includes(optionValue)}
             onValueChange={() => toggleValue(optionValue)}
           />
-          <Text>{label}</Text>
+          <Text style={{ marginLeft: 8 }}>{label}</Text>
         </View>
       ))}
     </>

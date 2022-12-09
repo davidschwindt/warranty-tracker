@@ -14,11 +14,11 @@ export default function PurchaseMethods({
   const color = useThemeColor({}, 'text');
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => navigation.goBack()} style={styles.link}>
-        <Text style={styles.linkText}>{'<-- Back'}</Text>
+      <Pressable onPress={() => navigation.replace('Home')} style={styles.link}>
+        <Text style={styles.linkText}>{'<-- Home'}</Text>
       </Pressable>
       <Text style={styles.title}>Purchase Methods</Text>
-      {Object.values(purchaseMethods).map(({ id, description }) => (
+      {Object.values(purchaseMethods).map(({ id, description, lastFour }) => (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <SvgXml
             xml={CreditCardIcon}
@@ -28,7 +28,9 @@ export default function PurchaseMethods({
             style={{ marginRight: 8 }}
           />
           <Pressable onPress={() => navigation.navigate('AddMethod', { id })}>
-            <Text style={styles.text}>{description}</Text>
+            <Text style={styles.text}>
+              {description} {lastFour ? `(${lastFour})` : ''}
+            </Text>
           </Pressable>
         </View>
       ))}
