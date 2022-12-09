@@ -1,7 +1,10 @@
 import { Image, Pressable } from 'react-native';
-import { View, Text } from './Themed';
+import { View, Text, useThemeColor } from './Themed';
 import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import { SvgXml } from 'react-native-svg';
+import CameraIcon from '../assets/icons/cameraLens4.svg';
+import TrashIcon from '../assets/icons/trash.svg';
 
 type Props = {
   imageUri?: string;
@@ -72,16 +75,25 @@ const ImageInput: React.FC<Props> = ({
           justifyContent: 'space-between',
         }}
       >
-        <Pressable onPress={openImagePicker}>
-          <Text>Browse...</Text>
+        <Pressable
+          onPress={openImagePicker}
+          style={{ backgroundColor: 'black', padding: 12 }}
+        >
+          <Text style={{ color: 'white' }}>Browse...</Text>
         </Pressable>
 
         <Pressable onPress={openCamera}>
-          <Text>Camera</Text>
+          <SvgXml
+            xml={CameraIcon}
+            fill="grey"
+            stroke="grey"
+            width={30}
+            height={30}
+          />
         </Pressable>
 
         <Pressable onPress={handleDelete}>
-          <Text>Delete</Text>
+          <SvgXml xml={TrashIcon} fill="grey" width={30} height={30} />
         </Pressable>
       </View>
     </View>
