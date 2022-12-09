@@ -30,7 +30,9 @@ export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
           onPress={() => navigation.navigate('AddItem')}
           style={{ backgroundColor: 'green', padding: 12, width: 150 }}
         >
-          <Text style={{ textAlign: 'center' }}>Add an item!</Text>
+          <Text style={{ textAlign: 'center', fontSize: 16, color: 'white' }}>
+            Add an item!
+          </Text>
         </Pressable>
       )}
       {Object.values(categories)

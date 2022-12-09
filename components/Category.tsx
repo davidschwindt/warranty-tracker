@@ -69,7 +69,7 @@ const Category: React.FC<{ id: string; label: string }> = ({ id, label }) => {
                   marginHorizontal: 12,
                 }}
               >
-                <Text>Cancel</Text>
+                <Text style={styles.buttonText}>Cancel</Text>
               </Pressable>
               <Pressable
                 onPress={handleSaveEdit}
@@ -78,7 +78,7 @@ const Category: React.FC<{ id: string; label: string }> = ({ id, label }) => {
                   padding: 8,
                 }}
               >
-                <Text>Save</Text>
+                <Text style={styles.buttonText}>Save</Text>
               </Pressable>
             </>
           ) : (
@@ -97,13 +97,13 @@ const Category: React.FC<{ id: string; label: string }> = ({ id, label }) => {
                       marginRight: 12,
                     }}
                   >
-                    <Text>Edit</Text>
+                    <Text style={styles.buttonText}>Edit</Text>
                   </Pressable>
                   <Pressable
                     onPress={handleDelete}
                     style={{ backgroundColor: 'red', padding: 8 }}
                   >
-                    <Text>Delete</Text>
+                    <Text style={styles.buttonText}>Delete</Text>
                   </Pressable>
                 </>
               ) : (
@@ -161,5 +161,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     fontSize: 20,
     fontWeight: '300',
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
   },
 });

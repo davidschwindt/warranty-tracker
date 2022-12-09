@@ -70,13 +70,13 @@ const AddCategory: React.FC<{
         onPress={() => setAddActive(false)}
         style={[styles.button, { backgroundColor: 'grey' }]}
       >
-        <Text>Cancel</Text>
+        <Text style={styles.buttonText}>Cancel</Text>
       </Pressable>
       <Pressable
         onPress={handleSave}
         style={[styles.button, { backgroundColor: 'green' }]}
       >
-        <Text>Save</Text>
+        <Text style={styles.buttonText}>Save</Text>
       </Pressable>
     </View>
   );
@@ -96,5 +96,10 @@ const styles = StyleSheet.create({
   button: {
     marginHorizontal: 12,
     padding: 12,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
   },
 });

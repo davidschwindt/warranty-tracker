@@ -442,7 +442,7 @@ export default function AddItem({
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: 'center' }}>Cancel</Text>
+          <Text style={styles.buttonText}>Cancel</Text>
         </Pressable>
         <Pressable
           onPress={handleSave}
@@ -453,7 +453,7 @@ export default function AddItem({
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: 'center' }}>Save</Text>
+          <Text style={styles.buttonText}>Save</Text>
         </Pressable>
       </View>
       {isEdit && (
@@ -461,7 +461,7 @@ export default function AddItem({
           onPress={handleDeleteItem}
           style={{ backgroundColor: 'red', flex: 1, padding: 12, margin: 12 }}
         >
-          <Text style={{ textAlign: 'center' }}>Delete</Text>
+          <Text style={styles.buttonText}>Delete</Text>
         </Pressable>
       )}
     </ScrollView>
@@ -488,5 +488,10 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     marginBottom: 4,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
   },
 });

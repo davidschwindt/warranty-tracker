@@ -135,12 +135,12 @@ export default function AddMethod({
       </Text>
 
       <View style={{ marginVertical: 8 }}>
-        <Text>Description</Text>
+        <Text style={styles.label}>Description</Text>
         <TextInput value={description} onChangeText={setDescription} />
       </View>
 
       <View style={{ marginVertical: 8 }}>
-        <Text>Last 4 Digits</Text>
+        <Text style={styles.label}>Last 4 Digits</Text>
         <TextInput
           value={lastFour}
           onChangeText={setLastFour}
@@ -150,17 +150,18 @@ export default function AddMethod({
 
       <View style={{ marginTop: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>Purchase Protection/Security</Text>
+          <Text style={styles.label}>Purchase Protection/Security</Text>
           <Switch
             value={protectionEnabled}
             onValueChange={setProtectionEnabled}
+            style={{ marginLeft: 8 }}
           />
         </View>
       </View>
       {protectionEnabled && (
         <View style={{ marginLeft: 16 }}>
           <View style={{ marginVertical: 8 }}>
-            <Text>Duration</Text>
+            <Text style={styles.label}>Duration</Text>
             <View style={{ zIndex: 10 }}>
               <DurationInput
                 numUnits={protectionNumUnits}
@@ -172,7 +173,7 @@ export default function AddMethod({
           </View>
 
           <View style={{ marginVertical: 8 }}>
-            <Text>Protects Against</Text>
+            <Text style={styles.label}>Protects Against</Text>
             <CheckboxList
               values={protectionThreats}
               onValuesChange={setProtectionThreats}
@@ -235,8 +236,12 @@ export default function AddMethod({
           zIndex: -1,
         }}
       >
-        <Text>Extended Warranty/Protection</Text>
-        <Switch value={extendedEnabled} onValueChange={setExtendedEnabled} />
+        <Text style={styles.label}>Extended Warranty/Protection</Text>
+        <Switch
+          value={extendedEnabled}
+          onValueChange={setExtendedEnabled}
+          style={{ marginLeft: 8 }}
+        />
       </View>
       {extendedEnabled && (
         <View
@@ -247,7 +252,7 @@ export default function AddMethod({
           }}
         >
           <View style={{ zIndex: 2, marginBottom: 8 }}>
-            <Text>Duration</Text>
+            <Text style={styles.label}>Duration</Text>
             <DurationInput
               numUnits={extendedNumUnits}
               setNumUnits={setExtendedNumUnits}
@@ -256,7 +261,7 @@ export default function AddMethod({
               onChangeOpen={setExtendedUnitOpen}
             />
           </View>
-          <Text>Coverage Begins</Text>
+          <Text style={styles.label}>Coverage Begins</Text>
           <View style={{ zIndex: extendedStartOpen ? 3 : 1 }}>
             <Dropdown
               open={extendedStartOpen}
@@ -278,9 +283,20 @@ export default function AddMethod({
         </View>
       )}
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', zIndex: -1 }}>
-        <Text>Return Protection</Text>
-        <Switch value={returnEnabled} onValueChange={setReturnEnabled} />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          zIndex: -1,
+          marginVertical: 8,
+        }}
+      >
+        <Text style={styles.label}>Return Protection</Text>
+        <Switch
+          value={returnEnabled}
+          onValueChange={setReturnEnabled}
+          style={{ marginLeft: 8 }}
+        />
       </View>
 
       <View
@@ -294,13 +310,13 @@ export default function AddMethod({
           onPress={() => navigation.goBack()}
           style={{ backgroundColor: 'grey', padding: 12, margin: 12, flex: 1 }}
         >
-          <Text style={{ textAlign: 'center' }}>Cancel</Text>
+          <Text style={styles.buttonText}>Cancel</Text>
         </Pressable>
         <Pressable
           onPress={handleSave}
           style={{ backgroundColor: 'green', padding: 12, margin: 12, flex: 1 }}
         >
-          <Text style={{ textAlign: 'center' }}>Save</Text>
+          <Text style={styles.buttonText}>Save</Text>
         </Pressable>
       </View>
       {isEdit && (
@@ -308,7 +324,7 @@ export default function AddMethod({
           onPress={handleDelete}
           style={{ backgroundColor: 'red', padding: 12, margin: 12 }}
         >
-          <Text style={{ textAlign: 'center' }}>Delete</Text>
+          <Text style={styles.buttonText}>Delete</Text>
         </Pressable>
       )}
     </ScrollView>
@@ -323,7 +339,7 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   link: {
@@ -333,5 +349,14 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  label: {
+    fontSize: 20,
+    marginBottom: 4,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
   },
 });

@@ -287,13 +287,13 @@ export default function ViewItem({
           onPress={() => navigation.navigate('AddItem', { id })}
           style={{ backgroundColor: 'red', flex: 1, padding: 12, margin: 12 }}
         >
-          <Text style={{ textAlign: 'center' }}>Edit</Text>
+          <Text style={styles.buttonText}>Edit</Text>
         </Pressable>
         <Pressable
           onPress={() => navigation.replace('Home')}
           style={{ backgroundColor: 'green', flex: 1, padding: 12, margin: 12 }}
         >
-          <Text style={{ textAlign: 'center' }}>Close</Text>
+          <Text style={styles.buttonText}>Close</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -326,5 +326,10 @@ const styles = StyleSheet.create({
   thinText: {
     fontSize: 18,
     fontWeight: '200',
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'white',
   },
 });
