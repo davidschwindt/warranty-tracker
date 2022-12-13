@@ -233,10 +233,10 @@ export default function AddItem({
   };
 
   const imageUrls = [
-    tempItemImageUri || item.itemImageUri,
-    tempReceiptImageUri || item.receiptImageUri,
-    tempSerialImageUri || item.serialImageUri,
-    tempWarrantyImageUri || item.warrantyImageUri,
+    tempItemImageUri || item?.itemImageUri,
+    tempReceiptImageUri || item?.receiptImageUri,
+    tempSerialImageUri || item?.serialImageUri,
+    tempWarrantyImageUri || item?.warrantyImageUri,
   ].filter((image) => !!image);
 
   const handleViewImage = (url: string) => {
