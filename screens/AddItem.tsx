@@ -20,11 +20,12 @@ import {
   View,
   ScrollView,
 } from '../components/Themed';
-import { AppData } from '../data/Provider';
+import { AppData, createId } from '../data/Provider';
 import { RootStackScreenProps } from '../types';
 import { DurationUnit } from '../types/Duration';
 import Item, { ExtendedWarrantyStart, itemLabels } from '../types/Item';
 import ImageInput from '../components/ImageInput';
+import ImageViewer from '../components/ImageViewer';
 import CategoryInput from '../components/CategoryInput';
 
 enum Camera {
@@ -100,15 +101,25 @@ export default function AddItem({
       : ExtendedWarrantyStart.expirationDate
   );
   const [notes, setNotes] = useState(isEdit ? item.notes : '');
+  const [showImageViewer, setShowImageViewer] = useState(false);
+  const [imageViewerIndex, setImageViewerIndex] = useState(0);
 
   const notesRef = useRef<DefaultTextInput>(null);
 
   const color = useThemeColor({}, 'text');
 
-  const newItemImageUri = `${FileSystem.documentDirectory}images/${id}-${Camera.item}.jpg`;
-  const newReceiptImageUri = `${FileSystem.documentDirectory}images/${id}-${Camera.receipt}.jpg`;
-  const newSerialImageUri = `${FileSystem.documentDirectory}images/${id}-${Camera.serial}.jpg`;
-  const newWarrantyImageUri = `${FileSystem.documentDirectory}images/${id}-${Camera.warranty}.jpg`;
+  const newItemImageUri = `${FileSystem.documentDirectory}images/${id}-${
+    Camera.item
+  }-${createId()}.jpg`;
+  const newReceiptImageUri = `${FileSystem.documentDirectory}images/${id}-${
+    Camera.receipt
+  }-${createId()}.jpg`;
+  const newSerialImageUri = `${FileSystem.documentDirectory}images/${id}-${
+    Camera.serial
+  }-${createId()}.jpg`;
+  const newWarrantyImageUri = `${FileSystem.documentDirectory}images/${id}-${
+    Camera.warranty
+  }-${createId()}.jpg`;
 
   const draftItem = {
     category,
@@ -221,6 +232,18 @@ export default function AddItem({
     }
   };
 
+  const imageUrls = [
+    tempItemImageUri || item.itemImageUri,
+    tempReceiptImageUri || item.receiptImageUri,
+    tempSerialImageUri || item.serialImageUri,
+    tempWarrantyImageUri || item.warrantyImageUri,
+  ].filter((image) => !!image);
+
+  const handleViewImage = (url: string) => {
+    setImageViewerIndex(imageUrls.findIndex((imageUrl) => url === imageUrl));
+    setShowImageViewer(true);
+  };
+
   const handleDeleteItem = () => {
     deleteItem(id);
     navigation.replace('Home');
@@ -243,228 +266,253 @@ export default function AddItem({
   };
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
-      <Pressable onPress={() => navigation.goBack()} style={styles.link}>
-        <Text style={styles.linkText}>{'<-- Back'}</Text>
-      </Pressable>
-      <Text style={styles.title}>{isEdit ? 'Edit' : 'Add'} Item</Text>
+    <>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
+        <Pressable onPress={() => navigation.goBack()} style={styles.link}>
+          <Text style={styles.linkText}>{'<-- Back'}</Text>
+        </Pressable>
+        <Text style={styles.title}>{isEdit ? 'Edit' : 'Add'} Item</Text>
 
-      <View style={{ marginVertical: 8, zIndex: 1 }}>
-        <Text style={styles.label}>{itemLabels.category}</Text>
-        <CategoryInput value={category} onChange={setCategory} />
-      </View>
+        <View style={{ marginVertical: 8, zIndex: 1 }}>
+          <Text style={styles.label}>{itemLabels.category}</Text>
+          <CategoryInput value={category} onChange={setCategory} />
+        </View>
 
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.description}</Text>
-        <TextInput value={description} onChangeText={setDescription} />
-      </View>
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.description}</Text>
+          <TextInput value={description} onChangeText={setDescription} />
+        </View>
 
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.make}</Text>
-        <TextInput value={make} onChangeText={setMake} />
-      </View>
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.make}</Text>
+          <TextInput value={make} onChangeText={setMake} />
+        </View>
 
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.model}</Text>
-        <TextInput value={model} onChangeText={setModel} />
-      </View>
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.model}</Text>
+          <TextInput value={model} onChangeText={setModel} />
+        </View>
 
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.serial}</Text>
-        <TextInput value={serial} onChangeText={setSerial} />
-      </View>
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.serial}</Text>
+          <TextInput value={serial} onChangeText={setSerial} />
+        </View>
 
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.purchaseDate}</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            margin: 8,
-          }}
-        >
-          <Text style={{ fontSize: 16, marginRight: 12 }}>
-            {new Date(purchaseDate).toLocaleDateString()}
-          </Text>
-          <Pressable
-            onPress={showDatePicker}
-            style={{ backgroundColor: 'blue', padding: 12 }}
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.purchaseDate}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              margin: 8,
+            }}
           >
-            <Text style={styles.buttonText}>select date</Text>
-          </Pressable>
-          {Platform.OS === 'ios' && datePickerOpen && (
-            <DatePicker
-              value={new Date(purchaseDate)}
-              mode="date"
-              display="spinner"
-              onChange={(event, date) => {
-                if (date && event.type !== 'dismissed') {
-                  setPurchaseDate(date);
-                }
-              }}
-            />
-          )}
-        </View>
-      </View>
-
-      <View style={{ marginVertical: 8, zIndex: purchaseMethodOpen ? 2 : 0 }}>
-        <Text style={styles.label}>{itemLabels.purchaseMethod}</Text>
-        <Dropdown
-          placeholder="Select a purchase method"
-          open={purchaseMethodOpen}
-          setOpen={setPurchaseMethodOpen}
-          value={purchaseMethod}
-          setValue={setPurchaseMethod}
-          items={Object.values(purchaseMethods).map(({ id, description }) => ({
-            value: id,
-            label: description,
-          }))}
-        />
-      </View>
-
-      <View style={{ marginVertical: 8, zIndex: 1 }}>
-        <Text style={styles.label}>{itemLabels.manufacturerWarranty}</Text>
-        <DurationInput
-          numUnits={warrantyNumUnits}
-          setNumUnits={setWarrantyNumUnits}
-          unit={warrantyUnit}
-          setUnit={setWarrantyUnit}
-        />
-      </View>
-
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.itemImageUri}</Text>
-        <ImageInput
-          imageUri={tempItemImageUri || item?.itemImageUri}
-          onImageSelected={(uri: string) => setItemImageUri(uri)}
-          onDelete={() => handleDeleteImage(Camera.item)}
-        />
-      </View>
-
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.receiptImageUri}</Text>
-        <ImageInput
-          imageUri={tempReceiptImageUri || item?.receiptImageUri}
-          onImageSelected={(uri: string) => setReceiptImageUri(uri)}
-          onDelete={() => handleDeleteImage(Camera.receipt)}
-        />
-      </View>
-
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.serialImageUri}</Text>
-        <ImageInput
-          imageUri={tempSerialImageUri || item?.serialImageUri}
-          onImageSelected={(uri: string) => setSerialImageUri(uri)}
-          onDelete={() => handleDeleteImage(Camera.serial)}
-        />
-      </View>
-
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>{itemLabels.warrantyImageUri}</Text>
-        <ImageInput
-          imageUri={tempWarrantyImageUri || item?.warrantyImageUri}
-          onImageSelected={(uri: string) => setWarrantyImageUri(uri)}
-          onDelete={() => handleDeleteImage(Camera.warranty)}
-        />
-      </View>
-
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>Storage Location for Original Warranty</Text>
-        <TextInput value={storageLocation} onChangeText={setStorageLocation} />
-      </View>
-
-      <View style={{ marginVertical: 8 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.label}>In-Store Extrnded Warranty Purchased</Text>
-          <Switch value={extendedEnabled} onValueChange={setExtendedEnabled} />
-        </View>
-      </View>
-
-      {extendedEnabled && (
-        <View style={{ paddingLeft: 16, zIndex: 1 }}>
-          <View style={{ marginBottom: 8 }}>
-            <Text style={styles.label}>Duration</Text>
-            <View style={{ zIndex: 2 }}>
-              <DurationInput
-                numUnits={extendedNumUnits}
-                setNumUnits={setExtendedNumUnits}
-                unit={extendedUnit}
-                setUnit={setExtendedUnit}
+            <Text style={{ fontSize: 16, marginRight: 12 }}>
+              {new Date(purchaseDate).toLocaleDateString()}
+            </Text>
+            <Pressable
+              onPress={showDatePicker}
+              style={{ backgroundColor: 'blue', padding: 12 }}
+            >
+              <Text style={styles.buttonText}>select date</Text>
+            </Pressable>
+            {Platform.OS === 'ios' && datePickerOpen && (
+              <DatePicker
+                value={new Date(purchaseDate)}
+                mode="date"
+                display="spinner"
+                onChange={(event, date) => {
+                  if (date && event.type !== 'dismissed') {
+                    setPurchaseDate(date);
+                  }
+                }}
               />
-            </View>
-          </View>
-          <View style={{ marginVertical: 8 }}>
-            <Text style={styles.label}>Coverage Begins</Text>
-            <View style={{ zIndex: extendedStartOpen ? 3 : 1 }}>
-              <Dropdown
-                open={extendedStartOpen}
-                setOpen={setExtendedStartOpen}
-                value={extendedStart}
-                setValue={setExtendedStart}
-                items={[
-                  {
-                    value: ExtendedWarrantyStart.purchaseDate,
-                    label: 'Purchase Date',
-                  },
-                  {
-                    value: ExtendedWarrantyStart.expirationDate,
-                    label: "Expiration of Manufacturer's Warranty",
-                  },
-                ]}
-              />
-            </View>
+            )}
           </View>
         </View>
-      )}
 
-      <View style={{ marginVertical: 8 }}>
-        <Text style={styles.label}>Notes</Text>
-        <Pressable
-          style={{ borderWidth: 1, borderColor: color, height: 200 }}
-          onPress={() => notesRef.current?.focus()}
-        >
-          <TextInput
-            ref={notesRef}
-            value={notes}
-            onChangeText={setNotes}
-            style={{ borderWidth: 0 }}
+        <View style={{ marginVertical: 8, zIndex: purchaseMethodOpen ? 2 : 0 }}>
+          <Text style={styles.label}>{itemLabels.purchaseMethod}</Text>
+          <Dropdown
+            placeholder="Select a purchase method"
+            open={purchaseMethodOpen}
+            setOpen={setPurchaseMethodOpen}
+            value={purchaseMethod}
+            setValue={setPurchaseMethod}
+            items={Object.values(purchaseMethods).map(
+              ({ id, description }) => ({
+                value: id,
+                label: description,
+              })
+            )}
           />
-        </Pressable>
-      </View>
+        </View>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={{
-            backgroundColor: 'grey',
-            padding: 12,
-            margin: 12,
-            flex: 1,
-          }}
-        >
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
-        <Pressable
-          onPress={handleSave}
-          style={{
-            backgroundColor: 'green',
-            padding: 12,
-            margin: 12,
-            flex: 1,
-          }}
-        >
-          <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
-      </View>
-      {isEdit && (
-        <Pressable
-          onPress={handleDeleteItem}
-          style={{ backgroundColor: 'red', flex: 1, padding: 12, margin: 12 }}
-        >
-          <Text style={styles.buttonText}>Delete</Text>
-        </Pressable>
+        <View style={{ marginVertical: 8, zIndex: 1 }}>
+          <Text style={styles.label}>{itemLabels.manufacturerWarranty}</Text>
+          <DurationInput
+            numUnits={warrantyNumUnits}
+            setNumUnits={setWarrantyNumUnits}
+            unit={warrantyUnit}
+            setUnit={setWarrantyUnit}
+          />
+        </View>
+
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.itemImageUri}</Text>
+          <ImageInput
+            imageUri={tempItemImageUri || item?.itemImageUri}
+            onImageSelected={(uri: string) => setItemImageUri(uri)}
+            onImagePress={handleViewImage}
+            onDelete={() => handleDeleteImage(Camera.item)}
+          />
+        </View>
+
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.receiptImageUri}</Text>
+          <ImageInput
+            imageUri={tempReceiptImageUri || item?.receiptImageUri}
+            onImageSelected={(uri: string) => setReceiptImageUri(uri)}
+            onImagePress={handleViewImage}
+            onDelete={() => handleDeleteImage(Camera.receipt)}
+          />
+        </View>
+
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.serialImageUri}</Text>
+          <ImageInput
+            imageUri={tempSerialImageUri || item?.serialImageUri}
+            onImageSelected={(uri: string) => setSerialImageUri(uri)}
+            onImagePress={handleViewImage}
+            onDelete={() => handleDeleteImage(Camera.serial)}
+          />
+        </View>
+
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>{itemLabels.warrantyImageUri}</Text>
+          <ImageInput
+            imageUri={tempWarrantyImageUri || item?.warrantyImageUri}
+            onImageSelected={(uri: string) => setWarrantyImageUri(uri)}
+            onImagePress={handleViewImage}
+            onDelete={() => handleDeleteImage(Camera.warranty)}
+          />
+        </View>
+
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>
+            Storage Location for Original Warranty
+          </Text>
+          <TextInput
+            value={storageLocation}
+            onChangeText={setStorageLocation}
+          />
+        </View>
+
+        <View style={{ marginVertical: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.label}>
+              In-Store Extrnded Warranty Purchased
+            </Text>
+            <Switch
+              value={extendedEnabled}
+              onValueChange={setExtendedEnabled}
+            />
+          </View>
+        </View>
+
+        {extendedEnabled && (
+          <View style={{ paddingLeft: 16, zIndex: 1 }}>
+            <View style={{ marginBottom: 8 }}>
+              <Text style={styles.label}>Duration</Text>
+              <View style={{ zIndex: 2 }}>
+                <DurationInput
+                  numUnits={extendedNumUnits}
+                  setNumUnits={setExtendedNumUnits}
+                  unit={extendedUnit}
+                  setUnit={setExtendedUnit}
+                />
+              </View>
+            </View>
+            <View style={{ marginVertical: 8 }}>
+              <Text style={styles.label}>Coverage Begins</Text>
+              <View style={{ zIndex: extendedStartOpen ? 3 : 1 }}>
+                <Dropdown
+                  open={extendedStartOpen}
+                  setOpen={setExtendedStartOpen}
+                  value={extendedStart}
+                  setValue={setExtendedStart}
+                  items={[
+                    {
+                      value: ExtendedWarrantyStart.purchaseDate,
+                      label: 'Purchase Date',
+                    },
+                    {
+                      value: ExtendedWarrantyStart.expirationDate,
+                      label: "Expiration of Manufacturer's Warranty",
+                    },
+                  ]}
+                />
+              </View>
+            </View>
+          </View>
+        )}
+
+        <View style={{ marginVertical: 8 }}>
+          <Text style={styles.label}>Notes</Text>
+          <Pressable
+            style={{ borderWidth: 1, borderColor: color, height: 200 }}
+            onPress={() => notesRef.current?.focus()}
+          >
+            <TextInput
+              ref={notesRef}
+              value={notes}
+              onChangeText={setNotes}
+              style={{ borderWidth: 0 }}
+            />
+          </Pressable>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              backgroundColor: 'grey',
+              padding: 12,
+              margin: 12,
+              flex: 1,
+            }}
+          >
+            <Text style={styles.buttonText}>Cancel</Text>
+          </Pressable>
+          <Pressable
+            onPress={handleSave}
+            style={{
+              backgroundColor: 'green',
+              padding: 12,
+              margin: 12,
+              flex: 1,
+            }}
+          >
+            <Text style={styles.buttonText}>Save</Text>
+          </Pressable>
+        </View>
+        {isEdit && (
+          <Pressable
+            onPress={handleDeleteItem}
+            style={{ backgroundColor: 'red', flex: 1, padding: 12, margin: 12 }}
+          >
+            <Text style={styles.buttonText}>Delete</Text>
+          </Pressable>
+        )}
+      </ScrollView>
+      {showImageViewer && (
+        <ImageViewer
+          imageUrls={imageUrls}
+          index={imageViewerIndex}
+          onClose={() => setShowImageViewer(false)}
+        />
       )}
-    </ScrollView>
+    </>
   );
 }
 

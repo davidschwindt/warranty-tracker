@@ -1,41 +1,39 @@
 import { StyleSheet } from 'react-native';
 import { View, Text } from './Themed';
+import { WarrantyStatus as Status } from '../screens/ViewItem';
 
-const WarrantyStatus = ({
+type WarrantyStatusProps = {
+  label: string;
+  status: Status;
+};
+
+const WarrantyStatus: React.FC<WarrantyStatusProps> = ({
   label,
-  status: { isExpired, startDate, endDate },
+  status: { status, startDate, endDate },
 }) => {
+  const color =
+    status === 'EXPIRED' ? 'red' : status === 'PENDING' ? 'orange' : 'green';
   return (
-    <>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-        <Text style={styles.text}>{label}: </Text>
-        <Text
-          style={[
-            styles.boldText,
-            {
-              color: isExpired === 'EXPIRED' ? 'red' : 'green',
-            },
-          ]}
+    <View style={{ marginVertical: 4 }}>
+      <Text style={styles.text}>{label}: </Text>
+      <View style={{ paddingLeft: 24 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.text}>Status: </Text>
+          <Text style={[styles.boldText, { color }]}>{status}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
         >
-          {isExpired}
-        </Text>
+          <Text style={styles.text}>Covers: </Text>
+          <Text style={[styles.boldText, { color }]}>
+            {startDate} - {endDate}
+          </Text>
+        </View>
       </View>
-      <View
-        style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 24 }}
-      >
-        <Text style={styles.text}>Coverage Dates: </Text>
-        <Text
-          style={[
-            styles.boldText,
-            {
-              color: isExpired === 'EXPIRED' ? 'red' : 'green',
-            },
-          ]}
-        >
-          {startDate} - {endDate}
-        </Text>
-      </View>
-    </>
+    </View>
   );
 };
 
@@ -48,5 +46,7 @@ const styles = StyleSheet.create({
   boldText: {
     fontSize: 18,
     fontWeight: 'bold',
+    flexWrap: 'wrap',
+    flex: 1,
   },
 });

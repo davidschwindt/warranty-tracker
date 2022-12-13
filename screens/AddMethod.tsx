@@ -287,7 +287,7 @@ export default function AddMethod({
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          zIndex: -1,
+          zIndex: -2,
           marginVertical: 8,
         }}
       >
@@ -303,7 +303,7 @@ export default function AddMethod({
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          zIndex: -1,
+          zIndex: -2,
         }}
       >
         <Pressable

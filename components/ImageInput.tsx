@@ -9,12 +9,14 @@ import TrashIcon from '../assets/icons/trash.svg';
 type Props = {
   imageUri?: string;
   onImageSelected: (imageUri: string) => void;
+  onImagePress: (imageUri: string) => void;
   onDelete: () => void;
 };
 
 const ImageInput: React.FC<Props> = ({
   imageUri,
   onImageSelected,
+  onImagePress,
   onDelete,
 }) => {
   const [recentlyDeleted, setRecentlyDeleted] = useState(false);
@@ -57,14 +59,17 @@ const ImageInput: React.FC<Props> = ({
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <View style={{ width: 75, height: 75, backgroundColor: 'grey' }}>
+      <Pressable
+        onPress={imageUri ? () => onImagePress(imageUri) : () => null}
+        style={{ width: 75, height: 75, backgroundColor: 'grey' }}
+      >
         {imageUri && !recentlyDeleted && (
           <Image
             source={{ uri: imageUri }}
             style={{ width: '100%', height: '100%' }}
           />
         )}
-      </View>
+      </Pressable>
 
       <View
         style={{

@@ -6,6 +6,7 @@ import { useContext, useState } from 'react';
 import { AppData } from '../data/Provider';
 import { SvgXml } from 'react-native-svg';
 import CreditCardIcon from '../assets/icons/creditCard.svg';
+import PlusIcon from '../assets/icons/plus.svg';
 
 export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
   const { categories, items } = useContext(AppData);
@@ -84,16 +85,7 @@ export default function Home({ navigation }: RootStackScreenProps<'Home'>) {
           onPress={() => setAddActive(!addActive)}
           style={styles.addItemButton}
         >
-          <Text
-            style={{
-              fontSize: 40,
-              lineHeight: 60,
-              textAlign: 'center',
-              color: 'white',
-            }}
-          >
-            +
-          </Text>
+          <SvgXml xml={PlusIcon} width={22} height={22} fill="white" />
         </Pressable>
       </View>
     </ScrollView>
@@ -125,8 +117,11 @@ const styles = StyleSheet.create({
   },
   addItemButton: {
     backgroundColor: 'green',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 60,
     width: 60,
     borderRadius: 100,
+    paddingTop: 2,
   },
 });
