@@ -406,7 +406,7 @@ export default function AddItem({
         <View style={{ marginVertical: 8 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={styles.label}>
-              In-Store Extrnded Warranty Purchased
+              In-Store Extended Warranty Purchased
             </Text>
             <Switch
               value={extendedEnabled}
