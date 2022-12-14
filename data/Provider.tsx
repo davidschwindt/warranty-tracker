@@ -67,13 +67,13 @@ const AppDataProvider: React.FC<{
   const addCategory = (data: Category) => {
     const newCategories = { ...categories, [data.id]: data };
     setCategories(newCategories);
-    AsyncStorage.setItem('@categories', JSON.stringify(newCategories));
+    AsyncStorage.setItem('@itemCategories', JSON.stringify(newCategories));
   };
 
   const editCategory = (data: Category) => {
     const newCategories = { ...categories, [data.id]: data };
     setCategories(newCategories);
-    AsyncStorage.setItem('@categories', JSON.stringify(newCategories));
+    AsyncStorage.setItem('@itemCategories', JSON.stringify(newCategories));
   };
 
   const deleteCategory = (id: string) => {
@@ -87,7 +87,7 @@ const AppDataProvider: React.FC<{
     const newCategories = { ...categories };
     delete newCategories[id];
     setCategories(newCategories);
-    AsyncStorage.setItem('@categories', JSON.stringify(newCategories));
+    AsyncStorage.setItem('@itemCategories', JSON.stringify(newCategories));
   };
 
   const addPurchaseMethod = (data: Omit<PurchaseMethod, 'id'>) => {
@@ -121,7 +121,7 @@ const AppDataProvider: React.FC<{
 
   const initData = async () => {
     const storedItems = await AsyncStorage.getItem('@items');
-    const storedCategories = await AsyncStorage.getItem('@categories');
+    const storedCategories = await AsyncStorage.getItem('@itemCategories');
     const storedPurchaseMethods = await AsyncStorage.getItem(
       '@purchaseMethods'
     );
