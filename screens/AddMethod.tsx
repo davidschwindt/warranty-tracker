@@ -18,7 +18,7 @@ import { ExtendedWarrantyStart } from '../types/Item';
 
 export default function AddMethod({
   navigation,
-}: RootStackScreenProps<'AddMethod'>) {
+}: RootStackScreenProps<'Add Purchase Method'>) {
   const {
     purchaseMethods,
     addPurchaseMethod,
@@ -120,7 +120,7 @@ export default function AddMethod({
     } else {
       addPurchaseMethod(draftPurchaseMethod);
     }
-    navigation.navigate('PurchaseMethods');
+    navigation.navigate('Purchase Methods');
   };
 
   const handleDelete = () => {
@@ -130,10 +130,6 @@ export default function AddMethod({
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
-      <Text style={styles.title}>
-        {isEdit ? 'Edit' : 'Add'} Purchase Method
-      </Text>
-
       <View style={{ marginVertical: 8 }}>
         <Text style={styles.label}>Description</Text>
         <TextInput value={description} onChangeText={setDescription} />
@@ -334,7 +330,7 @@ export default function AddMethod({
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    paddingTop: 64,
+    paddingTop: 24,
     paddingHorizontal: 24,
     paddingBottom: 48,
   },

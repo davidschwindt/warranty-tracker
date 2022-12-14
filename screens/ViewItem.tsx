@@ -85,7 +85,7 @@ const defaultText = 'N/A';
 
 export default function ViewItem({
   navigation,
-}: RootStackScreenProps<'ViewItem'>) {
+}: RootStackScreenProps<'View Item'>) {
   const color = useThemeColor({}, 'text');
   const [imageIndex, setImageIndex] = useState(0);
   const [showImageViewer, setShowImageViewer] = useState(false);
@@ -103,7 +103,7 @@ export default function ViewItem({
     purchaseMethodExtendedStatus,
   } = getManufacturerWarrantyStatus(item, purchaseMethods[item.purchaseMethod]);
 
-  const category = categories[item.category]?.text;
+  const category = categories[item.category]?.label;
   const purchaseDate = new Date(item.purchaseDate).toLocaleDateString();
   const purchaseMethod = purchaseMethods[item.purchaseMethod];
   const purchaseMethodText = purchaseMethod
@@ -128,7 +128,7 @@ export default function ViewItem({
       <ScrollView
         style={styles.container}
         contentContainerStyle={{
-          paddingTop: 64,
+          paddingTop: 24,
           paddingHorizontal: 24,
           paddingBottom: 48,
         }}
@@ -313,13 +313,13 @@ export default function ViewItem({
 
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable
-            onPress={() => navigation.navigate('AddItem', { id })}
+            onPress={() => navigation.navigate('Add Item', { id })}
             style={{ backgroundColor: 'red', flex: 1, padding: 12, margin: 12 }}
           >
             <Text style={styles.buttonText}>Edit</Text>
           </Pressable>
           <Pressable
-            onPress={() => navigation.replace('Home')}
+            onPress={() => navigation.navigate('Home')}
             style={{
               backgroundColor: 'green',
               flex: 1,

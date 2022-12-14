@@ -9,6 +9,7 @@ module.exports = function (api) {
           extensions: ['.svg'],
         },
       ],
+      ['react-native-reanimated/plugin'],
     ],
   };
 };

@@ -123,7 +123,9 @@ const Category: React.FC<{ id: string; label: string }> = ({ id, label }) => {
       {expanded && (
         <View style={{ alignItems: 'flex-start' }}>
           {items.map(({ id: itemId, description: itemLabel }) => (
-            <Pressable onPress={() => nav.navigate('ViewItem', { id: itemId })}>
+            <Pressable
+              onPress={() => nav.navigate('View Item', { id: itemId })}
+            >
               <Text style={styles.itemLabel}>{itemLabel}</Text>
             </Pressable>
           ))}

@@ -18,10 +18,10 @@ declare global {
 
 export type RootStackParamList = {
   Home: NavigatorScreenParams<RootTabParamList> | undefined;
-  AddItem: { id?: string; categoryId?: string } | undefined;
-  ViewItem: { id: string };
-  PurchaseMethods: undefined;
-  AddMethod: { id: string } | undefined;
+  'Add Item': { id?: string; categoryId?: string } | undefined;
+  'View Item': { id: string };
+  'Purchase Methods': undefined;
+  'Add Purchase Method': { id: string } | undefined;
   Modal: undefined;
   NotFound: undefined;
 };

@@ -37,7 +37,7 @@ enum Camera {
 
 export default function AddItem({
   navigation,
-}: RootStackScreenProps<'AddItem'>) {
+}: RootStackScreenProps<'Add Item'>) {
   const { items, categories, purchaseMethods, addItem, editItem, deleteItem } =
     useContext(AppData);
   const { params } = useRoute();
@@ -196,7 +196,7 @@ export default function AddItem({
     } else {
       addItem(draftItem);
     }
-    navigation.goBack();
+    navigation.navigate('Home');
   };
 
   const handleDeleteImage = (type: Camera) => {
@@ -246,7 +246,7 @@ export default function AddItem({
 
   const handleDeleteItem = () => {
     deleteItem(id);
-    navigation.replace('Home');
+    navigation.navigate('Home');
   };
 
   const showDatePicker = () => {
@@ -268,11 +268,6 @@ export default function AddItem({
   return (
     <>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.link}>
-          <Text style={styles.linkText}>{'<-- Back'}</Text>
-        </Pressable>
-        <Text style={styles.title}>{isEdit ? 'Edit' : 'Add'} Item</Text>
-
         <View style={{ marginVertical: 8, zIndex: 1 }}>
           <Text style={styles.label}>{itemLabels.category}</Text>
           <CategoryInput value={category} onChange={setCategory} />
@@ -518,8 +513,9 @@ export default function AddItem({
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 24,
     paddingHorizontal: 20,
-    paddingVertical: 48,
+    paddingBottom: 48,
   },
   title: {
     fontSize: 24,
