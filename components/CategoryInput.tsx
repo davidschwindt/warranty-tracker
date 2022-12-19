@@ -33,10 +33,12 @@ const AddCategory: React.FC<{
           setOpen={setSelectorOpen}
           value={value}
           setValue={onChange}
-          items={Object.values(categories).map(({ id: value, label }) => ({
-            value,
-            label,
-          }))}
+          items={Object.values(categories)
+            .sort((a, b) => (b.label > a.label ? -1 : 1))
+            .map(({ id: value, label }) => ({
+              value,
+              label,
+            }))}
           containerStyle={{ width: 200 }}
         />
         <Pressable
