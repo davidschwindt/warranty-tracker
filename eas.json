@@ -21,6 +21,19 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "schwindt.david@gmail.com",
+        "appleTeamId": "AVSXD3588Q",
+        "ascAppId": "1661042995"
+      }
+    },
+    "staging": {
+      "ios": {
+        "appleId": "schwindt.david@gmail.com",
+        "appleTeamId": "AVSXD3588Q",
+        "ascAppId": "1661042995"
+      }
+    }
   }
 }
